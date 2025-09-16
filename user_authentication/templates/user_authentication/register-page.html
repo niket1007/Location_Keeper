@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Location Keeper</title>
+    <link href="{% static 'user_authentication/css/register_css.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">
+            <h1>LocationKeeper</h1>
+            <p>Join and start saving your locations</p>
+        </div>
+
+        {% if form.non_field_errors|length > 0 %}
+            <div class="error-message" id="error-message">
+                {% for error in form.non_field_errors %}
+                    {{error}}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if form.username.errors|length > 0 %}
+            <div class="error-message" id="error-message">
+                {% for error in form.username.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if form.password.errors|length > 0 %}
+            <div class="error-message" id="error-message">
+                {% for error in form.password.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if form.full_name.errors|length > 0 %}
+            <div class="error-message" id="error-message">
+                {% for error in form.full_name.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form id="register-form" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="full_name">{{form.full_name.label_tag}}</label>
+                {{ form.full_name }}
+            </div>
+            
+            <div class="form-group">
+                <label for="username">{{form.username.label_tag}}</label>
+                {{ form.username }}
+            </div>
+
+            <div class="form-group">
+                <label for="password">{{form.password.label_tag}}</label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="register-btn" id="register-btn">Create Account</button>
+
+            <div class="divider">
+                <span>Already have an account?</span>
+            </div>
+
+            <div class="form-links">
+                <a href="/login/">Sign In</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add smooth animations
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Location Keeper</title>
+    <link href="{% static 'dashboard/css/dashboard-css.css' %}" rel="stylesheet" />
+   
+</head>
+<body>
+    
+    {% include "navbar.html" with dashboardActive="active" %}
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Welcome back, {{full_name}}</h1>
+            <p class="page-subtitle">Manage your saved locations and discover new places</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icon">📍</span>
+                <div class="stat-number">{{location_count}}</div>
+                <div class="stat-label">Saved Locations</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🏷️</span>
+                <div class="stat-number">{{tag_unique_count}}</div>
+                <div class="stat-label">Unique Tags</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🗺️</span>
+                <div class="stat-number">{{cities_unique_count}}</div>
+                <div class="stat-label">Cities Visited</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'add-location-page' %}" class="btn btn-primary action-buttons-a">
+                Add a New Location
+            </a>
+        </div>
+
+        <div class="locations-section">
+            <div class="section-header">
+                <h2 class="section-title">Your Saved Locations</h2>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search locations or tags..." id="searchInput">
+                    <button class="btn btn-secondary" onclick="searchLocations()">🔍</button>
+                </div>
+            </div>
+
+            <div class="locations-grid" id="locationsGrid">
+                {% for data in locations_and_tags %}
+                <div class="location-card">
+                    <div class="location-header">
+                        <div>
+                            <div class="location-name">{{data.Location.name}}</div>
+                        </div>
+                    </div>
+
+                    {% if data.Tags.count > 0 %}
+                    <div class="location-tags">
+                        {% for tag in data.Tags %}
+                            <span class="tag">{{tag.name}}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="location-actions">
+                        <a href="{{ data.Location.link }}" class="btn-small btn-directions" id="directionLink">🧭 Directions</a>
+                        <a class="btn-small btn-copy" onclick="copyToClipboard()">📋 Copy</a>
+                        <a href="{% url 'edit-location-page' data.Location.id %}" class="btn-small btn-edit">✏️ Edit</a>
+                        <a href="{% url 'delete-location-method' data.Location.id %}" class="btn-small btn-delete">🗑️ Delete</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Copy the url to clipboard
+        async function copyToClipboard() {
+            // navigator.clipboard.writeText(url);
+            let url = document.getElementById("directionLink");
+            console.log(url.href)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                // Modern approach
+                navigator.clipboard.writeText(url)
+                .then(() => {
+                    console.log("success", url);
+                })
+                .catch(err => {
+                    console.error("Failed to copy:", err);
+                });
+            }
+        }
+
+        // Search functionality
+        function searchLocations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const locationCards = document.querySelectorAll('.location-card');
+            
+            locationCards.forEach(card => {
+                const name = card.querySelector('.location-name').textContent.toLowerCase();
+                const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                
+                const matchesName = name.includes(searchTerm);
+                const matchesTags = tags.some(tag => tag.includes(searchTerm));
+                
+                if (matchesName || matchesTags || searchTerm === '') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Real-time search as user types
+        document.getElementById('searchInput').addEventListener('input', searchLocations);
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

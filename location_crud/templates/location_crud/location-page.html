@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Location - Location Keeper</title>
+    <link href="{% static 'location_crud/css/add-location-css.css' %}" rel="stylesheet" />
+    <script src="{% static 'location_crud/js/script.js' %}"></script>
+</head>
+<body>
+    
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">{{page.title}}</h1>
+            <p class="page-subtitle">{{page.subtitle}}</p>
+        </div>
+
+
+        <div class="form-section">
+            
+            {% if errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            {% if form.non_field_errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in form.non_field_errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form.name.errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in form.name.errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form.link.errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in form.link.errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form.city.errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in form.city.errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form.hidden_tags.errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in form.hidden_tags.errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form.tags.errors|length > 0 %}
+                <div class="error-message" id="error-message">
+                    {% for error in form.tags.errors %}
+                        {{error}}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if show_error_message %}
+                <div class="error-message" id="error-message">
+                    {{show_error_message}}
+                </div>
+            {% endif %}
+
+
+            {% if show_success_message %}
+                <div class="success-message" id="success-message">
+                    {{show_success_message}}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="locationName">{{form.name.label_tag}}</label>
+                    {{form.name}}
+                </div>
+
+                <div class="form-group">
+                    <label for="locationLink">{{form.link.label_tag}}</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        {{form.link}}
+                        <button type="button" class="btn btn-secondary" onclick="getCurrentLocationForLink()" id="getLocationLinkBtn">
+                            📍 Get Location
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="locationCity">{{form.city.label_tag}}</label>
+                    {{form.city}}
+                </div>
+
+                <div class="form-group">
+                    <label for="locationTags">{{form.tags.label_tag}}</label>
+                    {{form.tags}}
+                    {{form.hidden_tags}}
+                    <div class="tags-display" id="tagDisplay"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full-width">
+                    💾 Save Location
+                </button>
+
+                <button type="button" class="btn btn-secondary btn-full-width" onclick="previewOnMap()">
+                    🗺️ Preview on Map
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load the tags when edit page is loaded -->
+    <script>showTags()</script>
+</body>
+</html>

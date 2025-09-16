@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Location Keeper</title>
+    <link href="{% static 'userprofile/css/user-profile-css.css' %}" rel="stylesheet" />
+</head>
+<body>
+
+    <!--Navbar common html code-->  
+    {% include "navbar.html" with profileActive="active" %}
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">User Profile</h1>
+            <p class="page-subtitle">Manage your account details and preferences</p>
+        </div>
+        <div class="profile-card">
+            <div class="card-header">
+                <h2 class="card-title">Profile Details</h2>
+            </div>
+            <form id="profile-details-form" method="POST" action="{% url 'update-user-method' %}">
+                {% csrf_token %}
+                
+                {% if update_name_result == "success" %}
+                    <div class="success-message" id="success-message">
+                        Name updated successfully.
+                    </div>
+                {% endif %}
+                
+                {% if update_name_result == "error" %}
+                    <div class="error-message" id="error-message">
+                        Name update failed.
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                        <label for="full_name">{{update_name_form.full_name.label_tag}}</label>
+                        {{update_name_form.full_name}}
+                </div>
+                <div class="form-group">
+                    <label for="username">{{update_name_form.username.label_tag}}</label>
+                    {{update_name_form.username}}
+                </div>
+                <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+            </form>
+        </div>
+
+        <div class="profile-card">
+            <div class="card-header">
+                <h2 class="card-title">Change Password</h2>
+            </div>
+            <form id="password-change-form" method="POST" action="{% url 'update-password-method' %}">
+                {% csrf_token %}
+                {% if update_password_result == "success" %}
+                    <div class="success-message" id="success-message">
+                        Password updated successfully.
+                    </div>
+                {% endif %}
+                
+                {% if update_password_result == "error" %}
+                    <div class="error-message" id="error-message">
+                        Password update failed.
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="new_password">{{update_password_form.password.label_tag}}</label>
+                    {{update_password_form.password}}
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">{{update_password_form.confirm_password.label_tag}}</label>
+                    {{update_password_form.confirm_password}}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Update Password</button>
+            </form>
+        </div>
+
+        <div class="profile-card danger-zone">
+            <form id="deleteAccount" method="POST" action="{% url 'delete-account-method' %}">
+                {% csrf_token %}
+                <div class="card-header">
+                    <h2 class="card-title">Danger Zone</h2>
+                </div>
+                <p>Once you delete your account, there is no going back. Please be certain.</p>
+                <input type="text" value="Account-Delete" name="form-type" hidden>
+                <button type="submit" class="btn btn-danger">🗑️ Delete My Account</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
