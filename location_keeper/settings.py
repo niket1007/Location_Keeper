@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'location_keeper.wsgi.application'
+WSGI_APPLICATION = 'location_keeper.wsgi.app'
 
 
 # Database
