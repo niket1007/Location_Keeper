@@ -2,6 +2,8 @@
 
 A Django-based web application that allows users to manage and organize their saved locations with tags, making it easy to keep track of favorite places, visited locations, and points of interest.
 
+🌐 **Live Demo**: [https://location-keeper.vercel.app](https://location-keeper.vercel.app)
+
 ## 🌟 Features
 
 - **User Authentication**: Secure login and registration system
