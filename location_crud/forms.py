@@ -4,7 +4,6 @@ from location_keeper.utilities import isEmpty
 class LocationTagForm(forms.Form):
     name = forms.CharField(
         min_length=2,
-        max_length=15,
         label="Name",
         required=True,
         widget=forms.TextInput(

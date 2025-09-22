@@ -51,6 +51,7 @@ def update_location_and_tags(**data):
 
         for key in LOCATION_KEYS:
             if key in data and data[key] != getattr(location, key):
+                setattr(location, key, data[key])
                 updated_keys.append(key)
 
         if len(updated_keys) != 0:
